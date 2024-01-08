@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes y Órdenes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>SmartBand</h1>
+    </header>
+
+    <div class="contenedor-principal">
+        <div class="columna-izquierda">
+            <button onclick="mostrarAdministradores('administradores')">Ver Administradores</button>
+            <button onclick="mostrarFormularioCrearAdministrador()">Crear Administrador</button>
+            <button onclick="mostrarUsuarios('usuarios')">Ver Usuarios</button>
+            <button onclick="mostrarFormularioModificarUsuario()">Modificar Usuario</button>
+            <button onclick="mostrarFormularioBorrarUsuario()">Borrar Usuario</button>
+            <button onclick="mostrarFormularioCrearProveedor()">Agregar Proveedor</button>
+            <button onclick="mostrarFormularioBorrarProveedor()">Borrar Proveedor</button>
+            <button onclick="mostrarProveedores('Ver Proveedores')">Ver Proveedores</button>
+            <button onclick="mostrarStock()">Ver Stock de Productos</button>
+            <button onclick="mostrarFormularioAltaBajaStock()">Baja/Alta de Stock</button>
+            <button onclick="mostrarOrdenesCompra()">Ver Órdenes de Compra</button>
+        </div>
+
+        <div class="visor" id="visor">
+            {% if resultado %}
+                <ul>
+                    {% for row in resultado %}
+                        <li>{{ row }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay resultados.</p>
+            {% endif %}
+        </div>
+        
+
+        <div class="formulario" id="formulario">
+            <!-- Contenido del formulario se llenará dinámicamente mediante JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        Samgung SmartBand - ABM 2023 IFTS 18
+    </footer>
+
+    <script>
+        function mostrarAdministradores() {
+            // Realiza una solicitud AJAX al servidor
+            fetch('/ver_administradores')
+                .then(response => response.json())
+                .then(data => {
+                    // Manipula los datos recibidos y actualiza el contenido en el div "visor"
+                    const visorDiv = document.getElementById('visor');
+                    visorDiv.innerHTML = '<ul>';
+                    data.forEach(row => {
+                        visorDiv.innerHTML += `<li>${JSON.stringify(row)}</li>`;
+                    });
+                    visorDiv.innerHTML += '</ul>';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function mostrarUsuarios() {
+            // Realiza una solicitud AJAX al servidor
+            fetch('/ver_usuarios')
+                .then(response => response.json())
+                .then(data => {
+                    // Manipula los datos recibidos y actualiza el contenido en el div "visor"
+                    const visorDiv = document.getElementById('visor');
+                    visorDiv.innerHTML = '<ul>';
+                    data.forEach(row => {
+                        visorDiv.innerHTML += `<li>${JSON.stringify(row)}</li>`;
+                    });
+                    visorDiv.innerHTML += '</ul>';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+        function mostrarProveedores() {
+            // Realiza una solicitud AJAX al servidor
+            fetch('/ver_proveedores')
+                .then(response => response.json())
+                .then(data => {
+                    // Manipula los datos recibidos y actualiza el contenido en el div "visor"
+                    const visorDiv = document.getElementById('visor');
+                    visorDiv.innerHTML = '<ul>';
+                    data.forEach(row => {
+                        visorDiv.innerHTML += `<li>${JSON.stringify(row)}</li>`;
+                    });
+                    visorDiv.innerHTML += '</ul>';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function mostrarStock() {
+            // Realiza una solicitud AJAX al servidor
+            fetch('/ver_stock')
+                .then(response => response.json())
+                .then(data => {
+                    // Manipula los datos recibidos y actualiza el contenido en el div "visor"
+                    const visorDiv = document.getElementById('visor');
+                    visorDiv.innerHTML = '<ul>';
+                    data.forEach(row => {
+                        visorDiv.innerHTML += `<li>${JSON.stringify(row)}</li>`;
+                    });
+                    visorDiv.innerHTML += '</ul>';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function mostrarOrdenesCompra() {
+            // Realiza una solicitud AJAX al servidor
+            fetch('/ver_OrdenesCompra')
+                .then(response => response.json())
+                .then(data => {
+                    // Manipula los datos recibidos y actualiza el contenido en el div "visor"
+                    const visorDiv = document.getElementById('visor');
+                    visorDiv.innerHTML = '<ul>';
+                    data.forEach(row => {
+                        visorDiv.innerHTML += `<li>${JSON.stringify(row)}</li>`;
+                    });
+                    visorDiv.innerHTML += '</ul>';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+
+        function mostrarFormularioCrearAdministrador() {
+        const formularioDiv = document.getElementById('formulario');
+        formularioDiv.style.backgroundColor = '#321325'; 
+
+        const contenidoFormulario = `
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required><br>
+
+            <label for="fechaContratacion">Fecha de Contratación:</label>
+            <input type="text" id="fechaContratacion" name="fechaContratacion" required><br>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required><br>
+
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required><br>
+
+            <label for="pais">País:</label>
+            <input type="text" id="pais" name="pais" required><br>
+
+            <label for="jefe">Jefe:</label>
+            <input type="text" id="jefe" name="jefe" required><br>
+
+            <label for="sueldoBasico">Sueldo Básico:</label>
+            <input type="text" id="sueldoBasico" name="sueldoBasico" required><br>
+
+            <button onclick="enviarFormulario()">Submit</button>
+        `;
+
+        formularioDiv.innerHTML = contenidoFormulario;
+    }
+
+    function enviarFormulario() {
+        const nombre = document.getElementById('nombre').value;
+        const apellido = document.getElementById('apellido').value;
+        const fechaContratacion = document.getElementById('fechaContratacion').value;
+        const direccion = document.getElementById('direccion').value;
+        const ciudad = document.getElementById('ciudad').value;
+        const pais = document.getElementById('pais').value;
+        const jefe = document.getElementById('jefe').value;
+        const sueldoBasico = document.getElementById('sueldoBasico').value;
+
+        // Realiza una solicitud AJAX al servidor para guardar los datos
+        fetch('/guardar_administrador', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nombre,
+                apellido,
+                fechaContratacion,
+                direccion,
+                ciudad,
+                pais,
+                jefe,
+                sueldoBasico,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Puedes manejar la respuesta del servidor aquí si es necesario
+            console.log('Respuesta del servidor:', data);
+
+            // Muestra el mensaje de éxito
+            const mensajeExito = document.createElement('p');
+            mensajeExito.textContent = 'Administrador Creado exitosamente';
+            mensajeExito.classList.add('mensaje-exito'); // Agrega la clase de estilo
+        
+            formularioDiv.appendChild(mensajeExito);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Puedes mostrar un mensaje de error si es necesario
+        });
+    }
+
+    function mostrarFormularioBorrarUsuario() {
+        const formularioDiv = document.getElementById('formulario');
+        formularioDiv.style.backgroundColor = '#321325';
+        formularioDiv.innerHTML = ''; // Limpiar cualquier contenido existente
+
+        const contenidoFormulario = `
+            <label for="numeroCliente">Número de Cliente:</label>
+            <input type="text" id="numeroCliente" name="numeroCliente" required>
+            <button type="button" onclick="borrarUsuario()">Borrar Usuario</button>
+        `;
+
+        formularioDiv.innerHTML = contenidoFormulario;
+    }
+
+    function borrarUsuario() {
+        const numeroClienteInput = document.getElementById('numeroCliente');
+        const numeroCliente = numeroClienteInput.value;
+
+        fetch('/borrar_usuario', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ numeroCliente }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Usuario borrado exitosamente:', data);
+            mostrarUsuarios(); // Llama a la función para actualizar la lista de usuarios después de borrar
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function mostrarFormularioCrearProveedor() {
+        const formularioDiv = document.getElementById('formulario');
+        formularioDiv.style.backgroundColor = '#321325';
+        formularioDiv.innerHTML = ''; // Limpiar cualquier contenido existente
+
+        const contenidoFormulario = `
+            <label for="nombreCompania">Nombre de la Compañía:</label>
+            <input type="text" id="nombreCompania" name="nombreCompania" required><br>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required><br>
+
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required><br>
+
+            <label for="codigoPostal">Código Postal:</label>
+            <input type="text" id="codigoPostal" name="codigoPostal" required><br>
+
+            <label for="pais">País:</label>
+            <input type="text" id="pais" name="pais" required><br>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required><br>
+
+            <button type="button" onclick="enviarFormularioProveedor()">Agregar Proveedor</button>
+        `;
+
+        formularioDiv.innerHTML = contenidoFormulario;
+    }
+
+    function enviarFormularioProveedor() {
+        const nombreCompania = document.getElementById('nombreCompania').value;
+        const direccion = document.getElementById('direccion').value;
+        const ciudad = document.getElementById('ciudad').value;
+        const codigoPostal = document.getElementById('codigoPostal').value;
+        const pais = document.getElementById('pais').value;
+        const telefono = document.getElementById('telefono').value;
+
+        // Realiza una solicitud AJAX al servidor para guardar los datos
+        fetch('/guardar_proveedor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nombreCompania,
+                direccion,
+                ciudad,
+                codigoPostal,
+                pais,
+                telefono,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Puedes manejar la respuesta del servidor aquí si es necesario
+            console.log('Respuesta del servidor:', data);
+
+            // Muestra el mensaje de éxito
+            const mensajeExito = document.createElement('p');
+            mensajeExito.textContent = 'Proveedor Agregado exitosamente';
+            mensajeExito.classList.add('mensaje-exito'); // Agrega la clase de estilo
+        
+            formularioDiv.appendChild(mensajeExito);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Puedes mostrar un mensaje de error si es necesario
+        });
+    }
+
+    function mostrarFormularioBorrarProveedor() {
+        const formularioDiv = document.getElementById('formulario');
+        formularioDiv.style.backgroundColor = '#321325';
+        formularioDiv.innerHTML = ''; // Limpiar cualquier contenido existente
+
+        const contenidoFormulario = `
+            <label for="numeroProveedor">Número de Proveedor:</label>
+            <input type="text" id="numeroProveedor" name="numeroProveedor" required>
+            <button type="button" onclick="borrarProveedor()">Borrar Proveedor</button>
+        `;
+
+        formularioDiv.innerHTML = contenidoFormulario;
+    }
+
+    function borrarProveedor() {
+        const numeroProveedorInput = document.getElementById('numeroProveedor');
+        const numeroProveedor = numeroProveedorInput.value;
+
+        fetch('/borrar_proveedor', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ numeroProveedor }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Proveedor borrado exitosamente:', data);
+            mostrarProveedores(); // Llama a la función para actualizar la lista de proveedores después de borrar
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function mostrarFormularioAltaBajaStock() {
+        const formularioDiv = document.getElementById('formulario');
+        formularioDiv.style.backgroundColor = '#321325';
+        formularioDiv.innerHTML = ''; // Limpiar cualquier contenido existente
+
+        const contenidoFormulario = `
+            <p>Elije la siguiente opción de Stock:</p>
+            <label>
+                <input type="radio" name="opcionStock" value="alta" required> Alta
+            </label>
+            <label>
+                <input type="radio" name="opcionStock" value="baja" required> Baja
+            </label>
+            <br>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" required>
+            <br>
+            <button type="button" onclick="enviarAltaBajaStock()">Submit</button>
+        `;
+
+        formularioDiv.innerHTML = contenidoFormulario;
+    }
+
+    function enviarAltaBajaStock() {
+        const opcionStockRadio = document.querySelector('input[name="opcionStock"]:checked');
+        const cantidadInput = document.getElementById('cantidad');
+        
+        if (opcionStockRadio && cantidadInput) {
+            const opcionStock = opcionStockRadio.value;
+            const cantidad = cantidadInput.value;
+
+            // Realiza una solicitud AJAX al servidor para modificar el stock
+            fetch('/alta_baja_stock', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    opcionStock,
+                    cantidad,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Operación de Stock realizada exitosamente:', data);
+                // Puedes realizar alguna acción adicional si es necesario
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function mostrarFormularioModificarUsuario() {
+        const formularioDiv = document.getElementById('formulario');
+        formularioDiv.style.backgroundColor = '#321325';
+        formularioDiv.innerHTML = ''; // Limpiar cualquier contenido existente
+
+        const contenidoFormulario = `
+            <label for="idClienteModificar">ID del Cliente:</label>
+            <input type="number" id="idClienteModificar" name="idClienteModificar" required>
+            <br>
+            <label for="nuevoNombre">Nuevo Nombre:</label>
+            <input type="text" id="nuevoNombre" name="nuevoNombre" required>
+            <br>
+            <label for="nuevoApellido">Nuevo Apellido:</label>
+            <input type="text" id="nuevoApellido" name="nuevoApellido" required>
+            <br>
+            <button type="button" onclick="modificarUsuario()">Modificar Usuario</button>
+        `;
+
+        formularioDiv.innerHTML = contenidoFormulario;
+    }
+
+    function modificarUsuario() {
+        const idClienteModificarInput = document.getElementById('idClienteModificar');
+        const nuevoNombreInput = document.getElementById('nuevoNombre');
+        const nuevoApellidoInput = document.getElementById('nuevoApellido');
+        
+        if (idClienteModificarInput && nuevoNombreInput && nuevoApellidoInput) {
+            const idCliente = idClienteModificarInput.value;
+            const nuevoNombre = nuevoNombreInput.value;
+            const nuevoApellido = nuevoApellidoInput.value;
+
+            // Realiza una solicitud AJAX al servidor para modificar el usuario
+            fetch('/modificar_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    idCliente,
+                    nuevoNombre,
+                    nuevoApellido,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Usuario modificado exitosamente:', data);
+                // Puedes realizar alguna acción adicional si es necesario
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    </script>
+    
+
+</body>
+</html>
